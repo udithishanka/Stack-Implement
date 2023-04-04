@@ -1,0 +1,97 @@
+#include <iostream>
+#include <chrono>
+using namespace std;
+using namespace std::chrono;
+
+class Node {
+public:
+    int data;
+    Node* next;
+};
+
+class Stack {
+public:
+    Node* head;
+    Node* top;
+    
+    Stack() {
+        head = NULL;
+        top = NULL;
+    }
+    
+    bool is_empty() {
+        return (head == NULL);
+    }
+    
+    void push(int n) {
+        Node* new_node = new Node();
+        new_node->data = n;
+        if (is_empty()) {
+            head = new_node;
+            top = new_node;
+        }
+        else {
+            new_node->next = head;
+            head = new_node;
+        }
+    }
+    
+    int pop() {
+        if (is_empty()) {
+            cout << "Stack Underflow" << endl;
+            return -1;
+        }
+        else {
+            int x = top->data;
+            if (top == head) {
+                top = NULL;
+                head = NULL;
+            }
+            else {
+                Node* tmp = head;
+                while (tmp->next != top) {
+                    tmp = tmp->next;
+                }
+                tmp->next = NULL;
+                top = tmp;
+            }
+            return x;
+        }
+    }
+    
+    void display() {
+        Node* tmp = head;
+        while (tmp != NULL) {
+            cout << tmp->data << " ";
+            tmp = tmp->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    Stack S;
+    auto start = high_resolution_clock::now(); // Start time measurement
+    S.push(8);
+    S.push(10);
+    S.push(5);
+    S.push(11);
+    S.push(15);
+    S.push(23);
+    S.push(6);
+    S.push(18);
+    S.push(20);
+    S.push(17);
+    S.display();
+    S.pop(); S.pop(); S.pop(); S.pop(); S.pop();
+    S.display();
+    S.push(4);
+    S.push(30);
+    S.push(3);
+    S.push(1);
+    S.display();
+    auto stop = high_resolution_clock::now(); // Stop time measurement
+    auto duration = duration_cast<microseconds>(stop - start); // Calculate time difference
+    cout << "Time taken by main function: " << duration.count() << " microseconds" << endl; // Print time taken in microseconds
+    return 0;
+}
